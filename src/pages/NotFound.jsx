@@ -28,10 +28,10 @@ const NotFound = () => {
                         404
                     </motion.h1>
                     <h2 className="text-2xl md:text-3xl font-light text-indigo-200">
-                        Page Not Found
+                        Oops! We lost you there.
                     </h2>
-                    <p className="text-gray-400 max-w-sm mx-auto text-sm md:text-base">
-                        The page you are looking for doesn't exist or has been moved.
+                    <p className="text-gray-400 max-w-md mx-auto text-sm md:text-base leading-relaxed">
+                        It looks like your session may have expired or this page moved. No worries though—you can easily jump right back into the network by returning home and logging in again!
                     </p>
                 </div>
 
