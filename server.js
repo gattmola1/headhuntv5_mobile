@@ -85,39 +85,15 @@ app.all('/api/applications', async (req, res) => {
     const module = await import('./api/applications/index.js');
     adaptHandler(module.default)(req, res);
 });
-app.all('/api/applications/:id', async (req, res) => {
-    req.query.id = req.params.id;
-    const module = await import('./api/applications/[id].js');
-    adaptHandler(module.default)(req, res);
-});
 
-// Collaborators
-app.all('/api/collaborators', async (req, res) => {
-    const module = await import('./api/collaborators/index.js');
+// Events [NEW]
+app.all('/api/events', async (req, res) => {
+    const module = await import('./api/events/index.js');
     adaptHandler(module.default)(req, res);
 });
-app.all('/api/collaborators/:id', async (req, res) => {
+app.all('/api/events/:id', async (req, res) => {
     req.query.id = req.params.id;
-    const module = await import('./api/collaborators/[id].js');
-    adaptHandler(module.default)(req, res);
-});
-
-// Ideas
-app.all('/api/ideas', async (req, res) => {
-    const module = await import('./api/ideas/index.js');
-    adaptHandler(module.default)(req, res);
-});
-app.all('/api/ideas/:id', async (req, res) => {
-    req.query.id = req.params.id;
-    const module = await import('./api/ideas/[id].js');
-    adaptHandler(module.default)(req, res);
-});
-app.all('/api/ideas/:id/participants', async (req, res) => {
-    console.log(`[Server] Route matched for participants. Params:`, req.params);
-    // Force recreate req.query to ensure it's writable and includes 'id'
-    req.query = { ...req.query, id: req.params.id };
-    console.log(`[Server] Assigned req.query.id = ${req.query.id}`);
-    const module = await import('./api/ideas/[id]/participants.js');
+    const module = await import('./api/events/[id].js');
     adaptHandler(module.default)(req, res);
 });
 
@@ -143,8 +119,6 @@ app.all('/api/recruiters/:id', async (req, res) => {
     adaptHandler(module.default)(req, res);
 });
 app.all('/api/recruiters/slug/:slug', async (req, res) => {
-    // req.query is read-only in some environments, handle slug extraction in handler or via fallback
-    // req.query.slug = req.params.slug;
     const module = await import('./api/recruiters/slug/[slug].js');
     adaptHandler(module.default)(req, res);
 });
@@ -152,6 +126,12 @@ app.all('/api/recruiters/slug/:slug', async (req, res) => {
 // Leads
 app.all('/api/leads', async (req, res) => {
     const module = await import('./api/leads/index.js');
+    adaptHandler(module.default)(req, res);
+});
+
+// Queries (Chatbot)
+app.all('/api/queries', async (req, res) => {
+    const module = await import('./api/queries/index.js');
     adaptHandler(module.default)(req, res);
 });
 
@@ -164,7 +144,6 @@ app.all('/api/apply', async (req, res) => {
     const module = await import('./api/apply.js');
     adaptHandler(module.default)(req, res);
 });
-// Special handling for resume-link if it's dynamic
 app.all('/api/admin/resume-link/:path', async (req, res) => {
     try {
         req.query.path = req.params.path;

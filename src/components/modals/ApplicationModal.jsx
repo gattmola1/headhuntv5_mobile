@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Upload, CheckCircle, ChevronRight, ChevronLeft, Users, Clock, Flame } from 'lucide-react';
-import { API_URL } from '../config';
-import { supabase } from '../supabaseClient';
+import { X, Upload, CheckCircle, ChevronRight, ChevronLeft, Users, Clock, Flame, Link as LinkIcon } from 'lucide-react';
+import { API_URL } from '../../config/api';
+import { supabase } from '../../config/supabase';
 
 const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
     const [step, setStep] = useState(1);
@@ -22,6 +22,7 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+    const [copied, setCopied] = useState(false);
 
     // Determine if this is an "Idea" collaboration or a "Job" application
     // Ideas typically have total_hours already (even if 0) and we use committed_hours from user
@@ -102,12 +103,6 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
             return;
         }
 
-        if (!isIdea && !formData.resume) {
-            setError('Resume is required');
-            setIsSubmitting(false);
-            return;
-        }
-
         const data = new FormData();
 
         if (isIdea) {
@@ -154,6 +149,14 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
         }, 300);
     };
 
+    const handleCopyLink = () => {
+        const url = `${window.location.origin}/jobs?id=${job.id}`;
+        navigator.clipboard.writeText(url).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
+    };
+
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
@@ -169,12 +172,28 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 className="bg-zinc-950 border border-white/10 rounded-2xl w-full max-w-2xl relative z-10 overflow-hidden shadow-2xl shadow-blue-500/10 flex flex-col md:flex-row h-[80vh] md:h-auto"
             >
+                <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
+                    <button
+                        onClick={handleCopyLink}
+                        className="p-2 bg-black/50 hover:bg-black/70 rounded-full text-white/50 hover:text-white transition-all flex items-center justify-center"
+                        title="Copy direct link"
+                    >
+                        {copied ? <CheckCircle className="w-5 h-5 text-green-400" /> : <LinkIcon className="w-5 h-5" />}
+                    </button>
+                    <button
+                        onClick={handleClose}
+                        className="p-2 bg-black/50 hover:bg-black/70 rounded-full text-white/50 hover:text-white transition-all"
+                    >
+                        <X size={20} />
+                    </button>
+                </div>
+
                 {/* Left Side: Participants & Info */}
                 <div className="w-full md:w-1/2 p-8 border-b md:border-b-0 md:border-r border-white/10 bg-white/[0.02]">
                     <div className="space-y-6">
                         <div>
                             <span className="text-xs font-mono text-blue-400 uppercase tracking-widest">{isIdea ? 'Collaborating On' : 'Applying For'}</span>
-                            <h2 className="text-2xl font-bold mt-1">{job.title}</h2>
+                            <h2 className="text-2xl font-bold mt-1 pr-16">{job.title}</h2>
                         </div>
 
                         {isIdea && (
@@ -243,10 +262,6 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
 
                 {/* Right Side: Form */}
                 <div className="w-full md:w-1/2 p-8 relative">
-                    <button onClick={handleClose} className="absolute top-4 right-4 text-gray-500 hover:text-white">
-                        <X className="w-5 h-5" />
-                    </button>
-
                     {success ? (
                         <div className="h-full flex flex-col items-center justify-center text-center space-y-6 py-10 px-4">
                             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-16 h-16 bg-green-500/20 text-green-500 rounded-full flex items-center justify-center">
@@ -300,7 +315,7 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
                                 ) : (
                                     <>
                                         <div>
-                                            <label className="block text-[10px] font-mono text-gray-500 mb-1">LINKEDIN URL</label>
+                                            <label className="block text-[10px] font-mono text-gray-500 mb-1">LINKEDIN URL (OPTIONAL)</label>
                                             <div className="flex items-center bg-white/5 border border-white/10 rounded-lg focus-within:border-blue-500 transition-all overflow-hidden">
                                                 <span className="pl-3 py-2.5 text-xs text-gray-500 select-none whitespace-nowrap">linkedin.com/in/</span>
                                                 <input
@@ -314,9 +329,9 @@ const ApplicationModal = ({ job, isOpen, onClose, onSuccess }) => {
                                             </div>
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-mono text-gray-500 mb-1">RESUME (PDF) *</label>
+                                            <label className="block text-[10px] font-mono text-gray-500 mb-1">RESUME PDF (OPTIONAL)</label>
                                             <div className="border border-dashed border-white/20 rounded-lg p-4 text-center hover:bg-white/5 transition-colors relative">
-                                                <input type="file" accept=".pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" required />
+                                                <input type="file" accept=".pdf" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
                                                 <div className="flex items-center justify-center gap-2 text-xs text-gray-400">
                                                     <Upload className="w-4 h-4" />
                                                     {formData.resume ? formData.resume.name : "Upload PDF"}

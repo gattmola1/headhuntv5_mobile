@@ -1,67 +1,36 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Layout from './components/Layout';
-import LandingPage from './pages/LandingPage';
-import Jobs from './pages/Jobs';
-import About from './pages/About';
-import Match from './pages/Match';
-import Employers from './pages/Employers';
-import Legal from './pages/Legal';
-import Network from './pages/Network';
-import AdminDashboard from './pages/AdminDashboard';
-import Recruiters from './pages/Recruiters';
-import RecruiterProfile from './pages/RecruiterProfile';
-import Login from './pages/Login';
-import RequireAuth from './components/RequireAuth';
+import { ROUTES } from './config/routes';
+import Layout from './components/layout/Layout';
+import Home from './pages/Home';
+import PageLoader from './components/layout/PageLoader';
 
-const SecurityGuard = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    // If we were in admin and moved out, clear the token
-    // We check for /admin/ or /admin exactly
-    const isAdminRoute = (path) => path.startsWith('/admin') || path === '/admin';
-
-    // We can't easily know 'previous' path without a ref, 
-    // but we can check if current is NOT admin and token exists.
-    // To make it strict: if NOT on admin route, clear it.
-    if (!isAdminRoute(location.pathname)) {
-      if (sessionStorage.getItem('adminToken')) {
-        console.log("Navigating away from admin: locking dashboard.");
-        sessionStorage.removeItem('adminToken');
-      }
-    }
-  }, [location]);
-
-  return null;
-}
+// Lazy-loaded pages — only fetched when navigated to
+const Explore = lazy(() => import('./pages/Explore'));
+const Jobs = lazy(() => import('./pages/Jobs'));
+const About = lazy(() => import('./pages/About'));
+const Legal = lazy(() => import('./pages/Legal'));
+const Network = lazy(() => import('./pages/Network'));
+const Events = lazy(() => import('./pages/Events'));
+const Sitemap = lazy(() => import('./pages/Sitemap'));
 
 function App() {
   return (
     <Router>
-      <SecurityGuard />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="jobs" element={<Jobs />} />
-          <Route path="about" element={<About />} />
-          <Route path="match" element={<Match />} />
-          <Route path="employers" element={<Employers />} />
-          <Route path="legal" element={<Legal />} />
-          <Route path="network" element={<Network />} />
-          <Route path="recruiters" element={<Recruiters />} />
-          <Route path="recruiters/:slug" element={<RecruiterProfile />} />
-          <Route path="login" element={<Login />} />
-          <Route
-            path="admin"
-            element={
-              <RequireAuth>
-                <AdminDashboard />
-              </RequireAuth>
-            }
-          />
-        </Route>
-      </Routes>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          <Route path={ROUTES.HOME} element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path={ROUTES.EXPLORE.slice(1)} element={<Explore />} />
+            <Route path={ROUTES.JOBS.slice(1)} element={<Jobs />} />
+            <Route path={ROUTES.ABOUT.slice(1)} element={<About />} />
+            <Route path={ROUTES.LEGAL.slice(1)} element={<Legal />} />
+            <Route path={ROUTES.NETWORK.slice(1)} element={<Network />} />
+            <Route path={ROUTES.EVENTS.slice(1)} element={<Events />} />
+            <Route path={ROUTES.SITEMAP.slice(1)} element={<Sitemap />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </Router>
   );
 }

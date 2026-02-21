@@ -1,15 +1,17 @@
+
 import { getSupabaseClient } from '../_lib/supabase.js';
+import { supabaseAdmin } from '../_lib/supabaseAdmin.js';
 import { checkAdmin } from '../_lib/auth.js';
 
 export default async function handler(req, res) {
-    const supabase = getSupabaseClient(req);
     if (req.method === 'GET') {
         const isAdmin = await checkAdmin(req);
         console.log(`[API] GET /api/prospects - Admin Authenticated: ${isAdmin}`);
 
         if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
 
-        const { data, error } = await supabase
+        // Use Admin client for SELECT as it's restricted
+        const { data, error } = await supabaseAdmin
             .from('prospects')
             .select('*')
             .order('created_at', { ascending: false });
@@ -24,6 +26,9 @@ export default async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
+        // Public insert allowed by RLS policy "Allow public insert to prospects"
+        // So we can use standard client (anon)
+        const supabase = getSupabaseClient(req);
         const { data, error } = await supabase
             .from('prospects')
             .insert([req.body]);

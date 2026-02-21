@@ -8,8 +8,8 @@ const JobCard = ({ job, onApply }) => {
             className="p-6 rounded-xl border border-white/10 bg-white/5 hover:bg-white/[0.08] transition-all cursor-pointer group"
             onClick={() => onApply(job)}
         >
-            <div className="flex justify-between items-start">
-                <div className="flex-1">
+            <div className="flex flex-col md:flex-row justify-between items-start gap-4">
+                <div className="flex-1 w-full">
                     <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
                         {job.title}
                     </h3>
@@ -24,13 +24,13 @@ const JobCard = ({ job, onApply }) => {
                         {job.salary && (
                             <div className="flex items-center gap-1.5 text-green-400">
                                 <DollarSign className="w-3.5 h-3.5" />
-                                <span className="text-gray-400">${job.salary.toLocaleString()}/YR</span>
+                                <span className="text-gray-400">{job.salary.toLocaleString()}/YR</span>
                             </div>
                         )}
                     </div>
                 </div>
-                <div className="ml-4 pt-1">
-                    <div className="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm group-hover:bg-blue-500 transition-colors whitespace-nowrap">
+                <div className="w-full md:w-auto md:pt-1">
+                    <div className="w-full md:w-auto text-center px-4 py-2 bg-blue-600 text-white rounded-lg font-bold text-sm group-hover:bg-blue-500 transition-colors whitespace-nowrap">
                         Quick Apply →
                     </div>
                 </div>

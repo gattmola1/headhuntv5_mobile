@@ -1,16 +1,17 @@
+
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.PROD_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_PROD_SUPABASE_URL;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.PROD_SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-if (!supabaseUrl || !supabaseServiceKey) {
-    console.error('CRITICAL: Supabase URL or Service Role Key missing for Admin Client.');
+if (!supabaseServiceKey || supabaseServiceKey.includes('INSERT_YOUR')) {
+    console.warn('WARNING: SUPABASE_SERVICE_ROLE_KEY is missing or invalid. Admin operations will fail.');
 }
 
-/**
- * ADMIN ONLY CLIENT
- * This client uses the Service Role Key, which BYPASSES Row Level Security.
- * Use this ONLY for operations that cannot be performed by the user's context,
- * such as generating signed upload URLs, managing system tables, or background jobs.
- */
-export const supabaseAdmin = createClient(supabaseUrl || '', supabaseServiceKey || '');
+// Admin client with Service Role Key (Bypasses RLS)
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || 'placeholder', {
+    auth: {
+        autoRefreshToken: false,
+        persistSession: false
+    }
+});

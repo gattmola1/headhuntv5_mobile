@@ -1,3 +1,4 @@
+
 import { supabase } from './supabase.js';
 
 /**
@@ -15,7 +16,7 @@ export async function checkAdmin(req) {
     if (!token) return false;
 
     // 1. Legacy Check (Backwards Compatibility)
-    if (token === process.env.ADMIN_PASSWORD) {
+    if (process.env.ADMIN_PASSWORD && token === process.env.ADMIN_PASSWORD) {
         return true;
     }
 
@@ -24,9 +25,8 @@ export async function checkAdmin(req) {
         const { data: { user }, error } = await supabase.auth.getUser(token);
         if (error || !user) return false;
 
-        // Optional: Check for specific admin role or email if you have multiple users
         // For now, any authenticated user is considered admin if they have a valid token
-        // since we only gave login access to you.
+        // since we only gave login access to the admin user.
         return true;
     } catch (err) {
         console.error('Auth Check Error:', err);

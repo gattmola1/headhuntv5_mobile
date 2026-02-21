@@ -1,30 +1,30 @@
+
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL || process.env.PROD_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_PROD_SUPABASE_URL;
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.PROD_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.error('CRITICAL: Supabase URL or Anon Key missing.');
-}
-
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY;
+console.log('supabase.js initialized');
 /**
  * Creates a Supabase client ensuring RLS policies are respected.
- * If an Authorization header is present, it injects the JWT.
- * @param {Object} req - The request object
+ * If an Authorization header is present, it injects the JWT so the request runs as that user.
+ * @param {Object} req - The request object (optional)
  * @returns {Object} Supabase client instance
  */
 export const getSupabaseClient = (req) => {
-    const client = createClient(supabaseUrl || '', supabaseAnonKey || '', {
+    // If we have an Authorization header with a Bearer token, we use it.
+    // This allows RLS policies for authenticated users to work.
+    const headers = {};
+    if (req?.headers?.authorization) {
+        headers['Authorization'] = req.headers.authorization;
+    }
+
+    const client = createClient(supabaseUrl, supabaseAnonKey, {
         global: {
-            headers: {
-                // Pass the user's JWT if it exists, otherwise it stays Anon
-                Authorization: req?.headers?.authorization,
-            },
+            headers,
         },
     });
     return client;
 };
 
-// Default export for backward compatibility relative to simple scripts, 
-// but API routes should prefer getSupabaseClient(req)
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+// Default export for backward compatibility or simple scripts
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

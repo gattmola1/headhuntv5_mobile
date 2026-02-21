@@ -1,58 +1,52 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, ShieldCheck, Download, Users, Zap, FileText } from 'lucide-react';
-import ProspectModal from '../components/ProspectModal';
+import ProspectModal from '../components/modals/ProspectModal';
 
 const NetworkPage = () => {
     const [isProspectModalOpen, setIsProspectModalOpen] = useState(false);
 
     return (
-        <div className="max-w-5xl mx-auto py-12 space-y-24">
+        <div className="max-w-5xl mx-auto space-y-24">
             <ProspectModal
                 isOpen={isProspectModalOpen}
                 onClose={() => setIsProspectModalOpen(false)}
             />
             {/* Hero Section */}
-            <section className="text-center space-y-8 pt-12">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="w-24 h-24 bg-[#5865F2]/20 text-[#5865F2] rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-[#5865F2]/10"
-                >
-                    <MessageSquare size={48} />
-                </motion.div>
-                <div className="space-y-4">
-                    <motion.h1
+            {/* Hero Section */}
+            <section className="relative py-20 overflow-hidden rounded-3xl bg-zinc-900 border border-white/10">
+                <div className="absolute inset-0 bg-gradient-to-br from-[#5865F2]/20 via-transparent to-purple-600/20"></div>
+                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 px-6">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="w-24 h-24 bg-[#5865F2]/20 text-[#5865F2] rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-[#5865F2]/10"
+                    >
+                        <MessageSquare size={48} />
+                    </motion.div>
+                    <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-5xl md:text-8xl font-black tracking-tighter uppercase"
+                        className="inline-block px-4 py-1.5 rounded-full bg-[#5865F2]/10 text-[#5865F2] text-xs font-black tracking-[0.2em] uppercase border border-[#5865F2]/20"
                     >
-                        JOIN OUR <span className="text-[#5865F2]">NETWORK</span>
+                        Referral Program
+                    </motion.span>
+                    <motion.h1
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-tight"
+                    >
+                        Join our networking group to earn <span className="text-[#5865F2]">passive income.</span>
                     </motion.h1>
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto font-light leading-relaxed"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed"
                     >
-                        Network with 2,000+ builders, collaborate on new ideas and projects, and get direct access to resume help, interview prep, and real-time industry intelligence. Stop talking and start building—find your next role today.
+                        Earn passive income by selling access to your network. We sign Revenue Share Agreements so you're rewarded for making introductions with hiring employers and with top talent!
                     </motion.p>
                 </div>
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="flex flex-col sm:flex-row justify-center gap-4"
-                >
-                    <a
-                        href="https://discord.gg/NwQH763Gp"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-12 py-5 rounded-2xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-black transition-all text-xl shadow-2xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3"
-                    >
-                        Join our Discord
-                    </a>
-                </motion.div>
             </section>
 
             {/* Revenue Share Section (Partnership Model) */}
@@ -133,6 +127,33 @@ const NetworkPage = () => {
                         </div>
                     </div>
                 </div>
+            </section>
+
+            {/* Discord CTA Section */}
+            <section className="text-center pb-24 space-y-6">
+                <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-gray-400 text-lg max-w-2xl mx-auto"
+                >
+                    Please join our discussions in our discord. Everything from interview prep, career strategy, to aspiring start up founders.
+                </motion.p>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                >
+                    <a
+                        href="https://discord.gg/NwQH763Gp"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-12 py-5 rounded-2xl bg-[#5865F2] hover:bg-[#4752C4] text-white font-black transition-all text-xl shadow-2xl shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-3 inline-flex"
+                    >
+                        Join our Discord
+                    </a>
+                </motion.div>
             </section>
         </div>
     );

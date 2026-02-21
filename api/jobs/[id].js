@@ -1,4 +1,5 @@
-import { supabase } from '../_lib/supabase.js';
+
+import { supabaseAdmin } from '../_lib/supabaseAdmin.js';
 import { checkAdmin } from '../_lib/auth.js';
 
 export default async function handler(req, res) {
@@ -10,7 +11,7 @@ export default async function handler(req, res) {
 
     const { id } = req.query;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
         .from('postings')
         .delete()
         .eq('id', id);

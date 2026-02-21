@@ -1,4 +1,5 @@
-import { getSupabaseClient } from '../_lib/supabase.js';
+
+import { supabaseAdmin } from '../_lib/supabaseAdmin.js';
 import { checkAdmin } from '../_lib/auth.js';
 
 export default async function handler(req, res) {
@@ -11,9 +12,8 @@ export default async function handler(req, res) {
 
     if (!isAdmin) return res.status(403).json({ error: 'Forbidden' });
 
-    const supabase = getSupabaseClient(req);
-
-    const { data, error } = await supabase
+    // Use admin client because RLS policy is Private Read
+    const { data, error } = await supabaseAdmin
         .from('applications')
         .select(`
         *,

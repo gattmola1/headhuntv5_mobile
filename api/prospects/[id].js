@@ -1,4 +1,5 @@
-import { getSupabaseClient } from '../_lib/supabase.js';
+
+import { supabaseAdmin } from '../_lib/supabaseAdmin.js';
 import { checkAdmin } from '../_lib/auth.js';
 
 export default async function handler(req, res) {
@@ -8,11 +9,9 @@ export default async function handler(req, res) {
 
     if (!await checkAdmin(req)) return res.status(403).json({ error: 'Forbidden' });
 
-    const supabase = getSupabaseClient(req);
-
     const { id } = req.query;
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
         .from('prospects')
         .delete()
         .eq('id', id);

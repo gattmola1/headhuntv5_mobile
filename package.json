@@ -1,8 +1,8 @@
 {
-    "name": "headhunt-v3",
+    "name": "headhunt-v3-mobile",
     "private": true,
     "version": "1.0.0",
-    "description": "Premium recruitment platform for high-performance software engineering talent.",
+    "description": "Premium recruitment platform for high-performance software engineering talent (Mobile Version).",
     "repository": {
         "type": "git",
         "url": "https://github.com/gattmola1/headhuntv3.git"

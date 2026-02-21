@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { X, Send, Users, Briefcase, UserCheck, MessageCircle } from 'lucide-react';
-import { API_URL } from '../config';
+import { API_URL } from '../../config/api';
 
 const ProspectModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -70,9 +70,9 @@ const ProspectModal = ({ isOpen, onClose }) => {
             <motion.div
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
-                className="bg-zinc-950 border border-white/10 rounded-3xl w-full max-w-xl relative z-10 overflow-hidden shadow-2xl shadow-blue-500/10"
+                className="bg-zinc-950 border border-white/10 rounded-3xl w-full max-w-xl relative z-10 shadow-2xl shadow-blue-500/10 max-h-[90vh] flex flex-col"
             >
-                <div className="p-8">
+                <div className="p-6 md:p-8 overflow-y-auto w-full scrollbar-hide">
                     {success ? (
                         <div className="text-center space-y-6 py-8">
                             <div className="w-20 h-20 bg-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-blue-500/30">
@@ -137,9 +137,9 @@ const ProspectModal = ({ isOpen, onClose }) => {
                                     </div>
                                 </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* 2. Recommender Info */}
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-widest mb-2 px-1">
                                             <Users size={14} /> Your Information
                                         </div>
@@ -172,7 +172,7 @@ const ProspectModal = ({ isOpen, onClose }) => {
                                     </div>
 
                                     {/* 3. Prospect Info */}
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-widest mb-2 px-1">
                                             <Send size={14} /> Prospect Information
                                         </div>
