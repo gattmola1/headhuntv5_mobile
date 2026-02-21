@@ -13,6 +13,7 @@ const Legal = lazy(() => import('./pages/Legal'));
 const Network = lazy(() => import('./pages/Network'));
 const Events = lazy(() => import('./pages/Events'));
 const Sitemap = lazy(() => import('./pages/Sitemap'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path={ROUTES.NETWORK.slice(1)} element={<Network />} />
             <Route path={ROUTES.EVENTS.slice(1)} element={<Events />} />
             <Route path={ROUTES.SITEMAP.slice(1)} element={<Sitemap />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Suspense>
