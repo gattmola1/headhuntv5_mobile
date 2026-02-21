@@ -34,10 +34,14 @@ const Test1VerificationModal = ({ isOpen, onClose, onVerify, phoneNumber }) => {
         const accessCode = import.meta.env.VITE_ACCESS_CODE;
         if (code === accessCode) {
             setLoading(true);
+
+            // Preload the About page bundle in the background while the fake loading spinner runs
+            import('../../pages/About');
+
             setTimeout(() => {
                 navigate(ROUTES.ABOUT);
                 if (onVerify) onVerify();
-            }, 1500);
+            }, 3000);
         } else {
             const newAttempts = attempts + 1;
             setAttempts(newAttempts);
