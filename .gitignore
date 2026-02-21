@@ -1,6 +1,7 @@
-# Environment files - NEVER commit these
+# Environment and Schema files - NEVER commit these
 .env
 .env.*
+supabase_schema.sql
 
 
 # Database files
