@@ -4,9 +4,8 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 // ── Business Card Data ──────────────────────────────────────────────
 const CARD_A = {
     name: 'MATT GOLA',
-    title: 'PLACEMENT SPECIALIST',
-    logo: '/assets/logo.svg',
-    isImage: true,
+    title: 'CHIEF OPERATING OFFICER',
+    logo: '🌐',
     details: [
         { icon: '✉', text: 'gattmola@gmail.com' },
         { icon: '☎', text: '202-999-9688' },
@@ -14,12 +13,13 @@ const CARD_A = {
 };
 
 const CARD_B = {
-    name: 'ALEX CHEN',
-    title: 'CHIEF OPERATING OFFICER',
-    logo: '🌐',
+    name: 'YOUR NAME HERE',
+    title: 'PLACEMENT SPECIALIST',
+    logo: '/assets/logo.svg',
+    isImage: true,
     details: [
-        { icon: '🔗', text: 'linkedin.com/in/jia-liu' },
-        { icon: '📍', text: 'Plano' },
+        { icon: '🔗', text: 'linkedin.com/in/you' },
+        { icon: '📍', text: 'DFW' },
     ],
 };
 

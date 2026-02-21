@@ -1,10 +1,11 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Users, ArrowRight, LayoutList, CalendarDays, ChevronLeft, ChevronRight, X, Clock, SlidersHorizontal, MessageSquare, Check, Link as LinkIcon, CheckCircle } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowRight, LayoutList, CalendarDays, ChevronLeft, ChevronRight, X, Clock, MessageSquare, Check, Link as LinkIcon, CheckCircle } from 'lucide-react';
 import { API_URL } from '../config/api';
 import CardSwapSection from '../components/sections/CardSwapSection';
 import PageLoader from '../components/layout/PageLoader';
+import RSVPModal from '../components/modals/RSVPModal';
 
 const CATEGORIES = ['Arts', 'Business', 'Charity', 'Community', 'Gov', 'Social', 'Tech'];
 
@@ -13,9 +14,10 @@ const Events = () => {
     const [sortBy, setSortBy] = useState('featured'); // 'featured' or 'chronological'
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 1)); // March 2026
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [rsvpEvent, setRsvpEvent] = useState(null);
     const [selectedFilters, setSelectedFilters] = useState([]);
     const [events, setEvents] = useState([]);
-    const [eventsLoading, setEventsLoading] = useState(true);
+    const [eventsLoading, setEventsLoading] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
 
     useEffect(() => {
@@ -31,15 +33,16 @@ const Events = () => {
         }
     }, [events, searchParams]);
 
-    // Removed duplicate state declaration
-
-    // Fetch events from API
+    // Fetch events lazily — only fires the first time a filter chip is selected
+    const hasFetched = useRef(false);
     useEffect(() => {
+        if (selectedFilters.length === 0 || hasFetched.current) return;
+        hasFetched.current = true;
+        setEventsLoading(true);
         fetch(`${API_URL}/api/events`)
             .then(res => res.json())
             .then(data => {
                 const now = new Date();
-                // Normalize and filter out past events
                 const normalized = (data.events || [])
                     .map(e => ({
                         ...e,
@@ -58,7 +61,7 @@ const Events = () => {
                 console.error('Failed to fetch events', err);
                 setEventsLoading(false);
             });
-    }, []);
+    }, [selectedFilters]);
 
     // Intro animation for filters
     useEffect(() => {
@@ -100,7 +103,7 @@ const Events = () => {
         });
     }, [sortBy, filteredEvents]);
 
-    const featuredEvents = useMemo(() => filteredEvents.filter(e => e.isFeatured), [filteredEvents]);
+    const featuredEvents = useMemo(() => filteredEvents.filter(e => e.isFeatured).slice(0, 3), [filteredEvents]);
 
     const EventDetailModal = ({ event, onClose }) => {
         const [copied, setCopied] = useState(false);
@@ -120,7 +123,7 @@ const Events = () => {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9, y: 20 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    className="bg-zinc-900 border border-white/10 rounded-3xl max-w-2xl w-full overflow-hidden relative shadow-2xl"
+                    className="bg-zinc-900 border border-white/10 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-2xl"
                 >
                     <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
                         <button
@@ -179,21 +182,12 @@ const Events = () => {
                             </p>
                         </div>
 
-                        <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row gap-4">
+                        <div className="pt-6 border-t border-white/5">
                             <button
-                                onClick={() => {
-                                    // RSVP logic could go here or link to an external sign up
-                                    window.open(discordLink || "https://discord.gg/NwQH763Gp", "_blank");
-                                }}
-                                className="flex-1 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2"
+                                onClick={() => setRsvpEvent(event)}
+                                className="w-full px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2"
                             >
                                 RSVP Now <ArrowRight size={18} />
-                            </button>
-                            <button
-                                onClick={onClose}
-                                className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-white font-bold transition-all"
-                            >
-                                Maybe Later
                             </button>
                         </div>
                     </div>
@@ -395,12 +389,34 @@ const Events = () => {
                         }}
                     />
                 )}
+                {rsvpEvent && (
+                    <RSVPModal
+                        isOpen={!!rsvpEvent}
+                        event={rsvpEvent}
+                        onClose={() => setRsvpEvent(null)}
+                    />
+                )}
             </AnimatePresence>
 
             {/* Hero Section */}
             <section className="relative py-20 overflow-hidden rounded-3xl bg-zinc-900 border border-white/10">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20"></div>
-                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 px-6">
+                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8 px-6">
+                    <motion.div
+                        animate={{
+                            rotate: [0, -10, 10, -5, 5, 0],
+                            scale: [1, 1.1, 1]
+                        }}
+                        transition={{
+                            duration: 1.5,
+                            ease: "easeInOut",
+                            repeat: Infinity,
+                            repeatDelay: 3
+                        }}
+                        className="w-24 h-24 bg-blue-500/20 text-blue-400 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/10 border border-blue-500/20"
+                    >
+                        <Calendar size={48} />
+                    </motion.div>
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -560,7 +576,10 @@ const Events = () => {
                                                     </div>
                                                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{event.attendees} Registered</span>
                                                 </div>
-                                                <button className="text-blue-400 text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:text-blue-300 transition-colors">
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); setRsvpEvent(event); }}
+                                                    className="text-blue-400 text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:text-blue-300 transition-colors"
+                                                >
                                                     RSVP NOW <ArrowRight size={14} />
                                                 </button>
                                             </div>

@@ -129,6 +129,12 @@ app.all('/api/leads', async (req, res) => {
     adaptHandler(module.default)(req, res);
 });
 
+// RSVPs
+app.all('/api/rsvp', async (req, res) => {
+    const module = await import('./api/rsvp/index.js');
+    adaptHandler(module.default)(req, res);
+});
+
 // Queries (Chatbot)
 app.all('/api/queries', async (req, res) => {
     const module = await import('./api/queries/index.js');

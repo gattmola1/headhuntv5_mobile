@@ -6,15 +6,7 @@ import { API_URL } from '../config/api';
 import { ROUTES } from '../config/routes';
 import CardSwapSection from '../components/sections/CardSwapSection';
 
-const EVENT_ITEMS = [
-    { title: "Tech Career Expo 2026", date: "March 15, 2026", location: "San Francisco, CA", category: "Tech", attendees: "2,500+" },
-    { title: "Scaling Engineering Teams", date: "April 2, 2026", location: "Virtual", category: "Business", attendees: "500+" },
-    { title: "Founders Mixer", date: "May 12, 2026", location: "Austin, TX", category: "Social", attendees: "150" },
-    { title: "AI Summit", date: "March 28, 2026", location: "New York, NY", category: "Tech", attendees: "800" },
-    { title: "Product Dev Summit", date: "April 3, 2026", location: "Seattle, WA", category: "Tech", attendees: "750" },
-    { title: "Charity Gala", date: "April 18, 2026", location: "MOMA, NY", category: "Arts", attendees: "400" },
-    { title: "Past Event 1", date: "January 1, 2025", location: "Remote", category: "Misc", attendees: "100" }
-];
+
 
 const ScrollingBanner = ({ items, type, reverse = false, className = "py-10" }) => {
     const navigate = useNavigate();
@@ -96,24 +88,30 @@ const ScrollingBanner = ({ items, type, reverse = false, className = "py-10" }) 
 
 const Explore = () => {
     const [jobs, setJobs] = useState([]);
-
+    const [events, setEvents] = useState([]);
 
     useEffect(() => {
         // Fetch Jobs
         fetch(`${API_URL}/api/jobs`)
             .then(res => res.json())
             .then(data => setJobs(data.jobs || []));
-    }, []);
 
-    // Filter to future events, sort by date, then take top 5
-    const now = new Date();
-    const futureEvents = EVENT_ITEMS
-        .filter(event => new Date(event.date) >= now)
-        .sort((a, b) => new Date(a.date) - new Date(b.date))
-        .slice(0, 5);
+        // Fetch Events
+        const now = new Date();
+        fetch(`${API_URL}/api/events`)
+            .then(res => res.json())
+            .then(data => {
+                const future = (data.events || [])
+                    .filter(e => new Date(e.date) >= now)
+                    .sort((a, b) => new Date(a.date) - new Date(b.date))
+                    .slice(0, 5);
+                setEvents(future);
+            });
+    }, []);
 
     // Limit jobs to 5
     const heroJobs = jobs.slice(0, 5);
+    const futureEvents = events;
 
     return (
         <div className="space-y-12 pb-12">

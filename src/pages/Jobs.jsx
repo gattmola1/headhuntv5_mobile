@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Briefcase } from 'lucide-react';
 import { API_URL } from '../config/api';
 import JobCard from '../components/cards/JobCard';
 import ApplicationModal from '../components/modals/ApplicationModal';
+import ConsultationModal from '../components/modals/ConsultationModal';
 import PageLoader from '../components/layout/PageLoader';
+
+const DEFAULT_RECRUITER = {
+    id: null,
+    name: 'Headhunt Advisor'
+};
 
 const Jobs = () => {
     const [jobs, setJobs] = useState([]);
     const [selectedJob, setSelectedJob] = useState(null);
+    const [isConsultationModalOpen, setIsConsultationModalOpen] = useState(false);
     const [loading, setLoading] = useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -47,7 +55,22 @@ const Jobs = () => {
             {/* Hero Section */}
             <section className="relative py-20 overflow-hidden rounded-3xl bg-zinc-900 border border-white/10">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 via-transparent to-purple-600/20"></div>
-                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-6 px-6">
+                <div className="relative z-10 max-w-4xl mx-auto text-center space-y-8 px-6">
+                    <motion.div
+                        animate={{
+                            rotate: [0, -10, 10, -5, 5, 0],
+                            scale: [1, 1.1, 1]
+                        }}
+                        transition={{
+                            duration: 1.5,
+                            ease: "easeInOut",
+                            repeat: Infinity,
+                            repeatDelay: 3
+                        }}
+                        className="w-24 h-24 bg-blue-500/20 text-blue-400 rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-blue-500/10 border border-blue-500/20"
+                    >
+                        <Briefcase size={48} />
+                    </motion.div>
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -83,10 +106,10 @@ const Jobs = () => {
                         className="flex flex-col items-center gap-6 pt-4"
                     >
                         <a
-                            href="#jobs"
+                            href="#consultation"
                             onClick={(e) => {
                                 e.preventDefault();
-                                document.getElementById('jobs')?.scrollIntoView({ behavior: 'smooth' });
+                                setIsConsultationModalOpen(true);
                             }}
                             className="px-8 py-4 rounded-full bg-white text-black font-bold text-lg hover:bg-gray-200 transition-all shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_-15px_rgba(255,255,255,0.5)] transform hover:-translate-y-1"
                         >
@@ -136,6 +159,12 @@ const Jobs = () => {
                     }}
                 />
             )}
+
+            <ConsultationModal
+                isOpen={isConsultationModalOpen}
+                onClose={() => setIsConsultationModalOpen(false)}
+                recruiter={DEFAULT_RECRUITER}
+            />
         </div>
     );
 };

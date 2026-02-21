@@ -9,66 +9,57 @@ import { ROUTES } from '../config/routes';
 // FAQ Data
 const faqs = [
     {
-        question: "What is this platform?",
-        answer: "This is a high-performance recruitment platform designed to connect top talent with leading companies. We focus on speed, transparency, and quality.",
-        keywords: ["platform", "what is", "about", "purpose"]
+        question: "What exactly is this platform?",
+        answer: "Think of us as a private country club for your career. We're a curated network for elite builders, operators, and leaders. We backchannel exclusive roles, curate high-signal events, and pay out residuals for brilliant introductions.",
+        keywords: ["platform", "what is", "about", "purpose", "exactly"]
     },
     {
-        question: "How do I apply for a job?",
-        answer: "Simply browse the available positions on the Jobs page, click 'Quick Apply', and fill out the application form. You'll need to upload your resume in PDF format.",
-        keywords: ["apply", "job", "application", "resume", "how to"]
+        question: "What kind of events are available?",
+        answer: "A bit of everything for the ambitious. Technical deep-dives, founder mixers, community socials, and charity drives. Check the Events page to RSVP—and definitely jump into our Discord to see who else is going.",
+        keywords: ["events", "what events", "event types", "upcoming", "schedule", "discord"]
     },
     {
-        question: "Is it free for candidates?",
-        answer: "Yes, our platform is completely free for job seekers. We believe in removing barriers to career growth.",
-        keywords: ["free", "cost", "price", "candidates", "job seekers"]
+        question: "How much is this going to cost me?",
+        answer: "Zero. Nada. Zilch. It's completely free for candidates and network partners. We keep the lights on through executive placement commissions paid by employers when they find their next star.",
+        keywords: ["free", "cost", "price", "candidates", "pay", "money", "expensive"]
     },
     {
-        question: "How does the 'Match' incubator work?",
-        answer: "Match is designed to bridge the gap between underemployed talent, business hobbyists, and entrepreneurs. By sharing project ideas and committing weekly hours, these diverse groups come together in a decentralized incubator environment. It's about turning 'what if' into 'what's next' through collaborative execution.",
-        keywords: ["match", "incubator", "entrepreneur", "project", "collaboration"]
+        question: "Wait, so you're not a normal job board?",
+        answer: "Exactly. Job boards are where resumes go to gather digital dust. We partner directly with hiring managers to place top-tier talent quickly and quietly. No black holes here.",
+        keywords: ["job board", "normal", "different", "resume", "black hole", "why"]
     },
     {
-        question: "I'm an employer—how can I work with you?",
-        answer: "We're happy to move quickly. We can sign a CSA (Consulting Services Agreement) and start advertising your positions to our all-star network of obsessive builders and leaders immediately.",
-        keywords: ["employer", "hiring", "company", "business", "partner", "csa"]
+        question: "Alright, how do I actually apply for a role?",
+        answer: "Easy. Head over to the Jobs page. If you see a role with your name on it, hit 'Quick Apply' and drop your resume. If it's a mutual fit, we'll fast-track you directly to the decision-makers.",
+        keywords: ["apply", "job", "application", "resume", "how to", "process"]
     },
     {
-        question: "How is the job placement page funded?",
-        answer: "The platform is powered by network momentum. While it's free for candidates, the ecosystem is funded through executive placement commissions paid by employers when they find their next critical hire through our network.",
-        keywords: ["funded", "money", "business model", "revenue", "commission"]
-    },
-    {
-        question: "How can I contact support?",
-        answer: "You can reach out to us via our Discord community or email us at support@example.com.",
-        keywords: ["contact", "support", "help", "email", "discord"]
-    },
-    {
-        question: "What kind of events do you run?",
-        answer: "We host Tech career fairs, business webinars, networking mixers, community socials, charity drives, and more. Ask me to 'show me events' or type a category like 'tech events' to see what's coming up!",
-        keywords: ["events", "what events", "event types", "upcoming", "schedule"]
-    },
-    {
-        question: "Do you have any open jobs right now?",
-        answer: "Yes! We regularly post exclusive roles that aren't listed publicly elsewhere. Ask me to 'show me jobs' or mention a role like 'engineering jobs' to see current openings.",
-        keywords: ["jobs", "open roles", "positions", "hiring", "openings", "vacancies"]
-    },
-    {
-        question: "Can I RSVP to events through the platform?",
-        answer: "Absolutely. Browse our Events page to see upcoming events and RSVP directly. You'll also find featured events and a calendar view to plan ahead.",
-        keywords: ["rsvp", "register", "sign up", "event", "attend", "join"]
-    },
-    {
-        question: "What types of roles are available?",
-        answer: "We post a range of roles — from engineering and product to operations and leadership. Our hiring partners move fast and prefer candidates who are ready to step in. Ask me to 'show me jobs' to see current listings.",
-        keywords: ["role", "position", "type", "engineering", "product", "operations", "leadership", "what jobs"]
-    },
-    {
-        question: "How do I refer someone to the network?",
-        answer: "Head to the Referral page via the nav bar. You can earn passive income by referring qualified candidates who successfully place through our network.",
-        keywords: ["refer", "referral", "earn", "passive income", "network", "commission", "friend"],
+        question: "What's this about earning passive income?",
+        answer: "That’s our Network Partner program. If you know high-performers looking to move, or hiring managers looking to build, suggest them via the Network page. If your intro leads to a placement or contract, we cut you a check. It pays to have friends.",
+        keywords: ["passive income", "earn", "money", "refer", "referral", "network", "commission", "friend"],
         link: ROUTES.NETWORK
     },
+    {
+        question: "I'm hiring right now. Can you help me find someone?",
+        answer: "Absolutely. We pride ourselves on moving fast. We can sign a straightforward Consulting Services Agreement (CSA) today and start routing our all-star network to your open reqs immediately. Let's build your team.",
+        keywords: ["employer", "hiring", "company", "business", "partner", "csa", "help"]
+    },
+    {
+        question: "Tell me more about this Discord community.",
+        answer: "It's the inner circle. It's where the real magic happens—spontaneous project collaborations, interview prep, real-time event updates, and general high-signal networking. You should probably be in there.",
+        keywords: ["discord", "community", "chat", "inner circle", "group"]
+    },
+    {
+        question: "What if I just want to browse a normal website?",
+        answer: "Fair enough! We know chatbots aren't for everyone. Our Explore page gives you the beautifully-designed highlight reel of what we do. But trust us, the good stuff happens on the inside.",
+        keywords: ["normal website", "normal site", "explore", "regular", "overview", "website instead", "useless", "terrible", "awful", "horrible", "worst", "bad bot", "hate this", "hate you", "you suck", "this sucks", "broken", "doesn't work", "doesn't understand", "stop", "give up", "forget it", "nevermind", "whatever", "stupid", "dumb", "not helpful", "unhelpful", "what do I do"],
+        link: ROUTES.EXPLORE
+    },
+    {
+        question: "Are you some sort of AI career coach?",
+        answer: "Think of me more like your highly-connected, slightly-robotic talent router. I can point you to the right roles and upcoming events, but for real mentorship and coaching, you'll want to connect with the human operators in our Discord.",
+        keywords: ["career coach", "coach", "coaching", "mentor", "mentoring", "advisor", "guidance", "help me", "what are you", "who are you", "what do you do", "are you ai", "are you a bot", "are you human"]
+    }
 ];
 
 // ─── Fuzzy Matching Utilities ─────────────────────────────────────────────────
@@ -300,17 +291,39 @@ const SuggestedQuestion = ({ question, onClick }) => (
 
 const ChatbotInterface = () => {
     const [messages, setMessages] = useState([
-        { isBot: true, text: "👋 Hi! I can answer questions about our network, point you to some upcoming events you might like, and even help you check if any roles are a perfect fit for you. How can I help you today?" }
+        { isBot: true, text: "🤖 Hi! I can answer questions about our network, point you to some upcoming events you might like, and check if you're a perfect fit for any roles." }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [messageCount, setMessageCount] = useState(0);
     const messagesEndRef = useRef(null);
     const consecutiveErrors = useRef(0);
+    const queryLogRef = useRef([]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isTyping]);
+
+    useEffect(() => {
+        const sendLogs = () => {
+            if (queryLogRef.current.length > 0) {
+                // Use keepalive: true for reliable sending on unload
+                fetch(`${API_URL}/api/queries`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(queryLogRef.current),
+                    keepalive: true
+                }).catch(() => { });
+                queryLogRef.current = [];
+            }
+        };
+
+        window.addEventListener('beforeunload', sendLogs);
+        return () => {
+            window.removeEventListener('beforeunload', sendLogs);
+            sendLogs();
+        };
+    }, []);
 
     const findBestFaqMatch = (query) => {
         const lq = query.toLowerCase();
@@ -439,11 +452,12 @@ const ChatbotInterface = () => {
             if (intent === 'events') {
                 const matches = await fetchAndMatchEvents(query);
 
-                fetch(`${API_URL}/api/queries`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query_text: query, intent, matched: matches.length > 0 })
-                }).catch(() => { });
+                queryLogRef.current.push({
+                    query_text: query,
+                    intent,
+                    matched: matches.length > 0,
+                    response: matches.length > 0 ? `Here are ${matches.length} event${matches.length > 1 ? 's' : ''} that might interest you:` : `I couldn't find events matching that — browse the full Events page to see everything coming up! If this seems wrong, please alert our devs on Discord.`
+                });
 
                 setIsTyping(false);
                 if (matches.length === 0) {
@@ -458,11 +472,12 @@ const ChatbotInterface = () => {
             if (intent === 'jobs') {
                 const matches = await fetchAndMatchJobs(query);
 
-                fetch(`${API_URL}/api/queries`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query_text: query, intent, matched: matches.length > 0 })
-                }).catch(() => { });
+                queryLogRef.current.push({
+                    query_text: query,
+                    intent,
+                    matched: matches.length > 0,
+                    response: matches.length > 0 ? `Here are ${matches.length} role${matches.length > 1 ? 's' : ''} that could be a fit:` : `No open roles match that right now — check the Jobs page for the latest listings. If this seems wrong, give our devs a shout on Discord!`
+                });
 
                 setIsTyping(false);
                 if (matches.length === 0) {
@@ -477,11 +492,12 @@ const ChatbotInterface = () => {
             // FAQ fallback
             const match = findBestFaqMatch(query);
 
-            fetch(`${API_URL}/api/queries`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query_text: query, intent, matched: !!match })
-            }).catch(() => { });
+            queryLogRef.current.push({
+                query_text: query,
+                intent,
+                matched: !!match,
+                response: match ? match.answer : "Honestly, I'm not sure what you mean!"
+            });
 
             setTimeout(() => {
                 setIsTyping(false);
@@ -515,10 +531,12 @@ const ChatbotInterface = () => {
     };
 
     const suggestedQuestions = [
-        "Are there any ___ jobs?",
-        "Show me tech events",
+        "I'm looking for a job in sales.",
+        "Show me a list of upcoming local events",
         "What is this platform?",
-        "How much do referrals pay?",
+        "How much can I make from referrals?",
+        "Are you some sort of career coach?",
+        "Show me a normal website instead.",
     ];
 
     return (
@@ -539,7 +557,7 @@ const ChatbotInterface = () => {
             {/* Suggested Questions */}
             {messages.length === 1 && (
                 <div className="px-4 pb-4">
-                    <p className="text-xs text-gray-500 mb-2 font-medium">Try asking:</p>
+                    <p className="text-xs text-gray-500 mb-2 font-medium">Popular prompts:</p>
                     <div className="flex flex-wrap gap-2">
                         {suggestedQuestions.map((q, idx) => (
                             <SuggestedQuestion

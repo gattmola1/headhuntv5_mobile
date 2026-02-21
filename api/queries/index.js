@@ -26,21 +26,26 @@ export default async function handler(req, res) {
     } else if (req.method === 'POST') {
         // Public submission allowed by policy
         try {
-            const { query_text, intent, matched } = req.body;
+            const queries = Array.isArray(req.body) ? req.body : [req.body];
 
             // Basic validation
-            if (!query_text) {
-                return res.status(400).json({ error: "Missing query_text" });
+            if (queries.length === 0) {
+                return res.status(400).json({ error: "Empty payload" });
+            }
+
+            const validQueries = queries.filter(q => q.query_text);
+            if (validQueries.length === 0) {
+                return res.status(400).json({ error: "No valid queries provided" });
             }
 
             // Use standard client for insert (Public Insert)
             const supabase = getSupabaseClient(req);
             const { data, error } = await supabase
                 .from('user_queries')
-                .insert([{ query_text, intent, matched }]);
+                .insert(validQueries);
 
             if (error) throw error;
-            res.status(201).json({ message: "Query logged" });
+            res.status(201).json({ message: "Queries logged" });
         } catch (error) {
             console.error('Error logging user query:', error);
             res.status(500).json({ error: error.message });

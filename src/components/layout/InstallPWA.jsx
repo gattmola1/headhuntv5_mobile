@@ -8,6 +8,9 @@ const InstallPWA = () => {
     const [isIOS, setIsIOS] = useState(false);
     const [showIOSInstruction, setShowIOSInstruction] = useState(false);
     const [isInstalled, setIsInstalled] = useState(false);
+    const [hasDismissed, setHasDismissed] = useState(() => {
+        return localStorage.getItem('pwaPromptDismissed') === 'true';
+    });
     const location = useLocation();
 
     useEffect(() => {
@@ -33,6 +36,10 @@ const InstallPWA = () => {
 
     const handleInstallClick = (e) => {
         e.preventDefault();
+
+        localStorage.setItem('pwaPromptDismissed', 'true');
+        setHasDismissed(true);
+
         if (isIOS) {
             setShowIOSInstruction(true);
         } else if (promptInstall) {
@@ -56,19 +63,21 @@ const InstallPWA = () => {
     return (
         <>
             {/* Floating Install Button */}
-            <button
-                onClick={handleInstallClick}
-                className="fixed bottom-24 right-6 z-50 flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-3 rounded-full shadow-lg hover:bg-white/20 transition-all font-medium text-sm animate-fade-in group"
-            >
-                <div className="bg-gradient-to-tr from-blue-500 to-purple-500 w-8 h-8 rounded-full flex items-center justify-center">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16L12 8" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                        <path d="M9 13L12 16L15 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M8 20H16" stroke="white" strokeWidth="2" strokeLinecap="round" />
-                    </svg>
-                </div>
-                <span className="hidden group-hover:block pr-2">Install App</span>
-            </button>
+            {!hasDismissed && (
+                <button
+                    onClick={handleInstallClick}
+                    className="fixed bottom-24 right-6 z-50 flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-3 rounded-full shadow-lg hover:bg-white/20 transition-all font-medium text-sm animate-fade-in group"
+                >
+                    <div className="bg-gradient-to-tr from-blue-500 to-purple-500 w-8 h-8 rounded-full flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 16L12 8" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                            <path d="M9 13L12 16L15 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M8 20H16" stroke="white" strokeWidth="2" strokeLinecap="round" />
+                        </svg>
+                    </div>
+                    <span className="hidden group-hover:block pr-2">Install App</span>
+                </button>
+            )}
 
             {/* iOS Instructions Modal */}
             {showIOSInstruction && (

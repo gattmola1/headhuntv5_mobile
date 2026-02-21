@@ -3,9 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
 
 import { MessageSquare, ArrowRight } from 'lucide-react';
-import SignupModal from '../components/modals/SignupModal';
 import VerificationModal from '../components/modals/VerificationModal';
-import RoleSelectionModal from '../components/modals/RoleSelectionModal';
 
 
 const Home = () => {
@@ -14,9 +12,7 @@ const Home = () => {
     const [hasScrolled, setHasScrolled] = React.useState(false);
 
     // Modal State
-    const [isSignupOpen, setIsSignupOpen] = React.useState(false);
     const [isVerificationOpen, setIsVerificationOpen] = React.useState(false);
-    const [isRoleOpen, setIsRoleOpen] = React.useState(false);
 
     // Particle State
     const [particles, setParticles] = React.useState([]);
@@ -35,7 +31,7 @@ const Home = () => {
         // We'll give it a bit of time to "be" there.
         const timer = setTimeout(() => {
             setHasScrolled(true);
-        }, 1500); // Trigger after 1.5 seconds
+        }, 3000); // Trigger after 3 seconds
 
         return () => clearTimeout(timer);
     }, []);
@@ -43,18 +39,6 @@ const Home = () => {
     const discordLink = "https://discord.gg/NwQH763Gp";
 
     // Flow Handlers
-    const handleSignupSubmit = (formData) => {
-        setUserContext(prev => ({ ...prev, ...formData }));
-        setIsSignupOpen(false);
-        setIsRoleOpen(true);
-    };
-
-    const handleRoleSelect = (role) => {
-        setUserContext(prev => ({ ...prev, role }));
-        setIsRoleOpen(false);
-        setIsVerificationOpen(true);
-    };
-
     const handleVerificationComplete = () => {
         console.log('Finalizing signup with verification:', userContext);
         // Here we would create the user in the backend
@@ -108,7 +92,7 @@ const Home = () => {
                     className="text-center"
                 >
                     <h1 className="text-7xl md:text-9xl font-bold tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/50">
-                        Welcome
+                        Hello
                     </h1>
                 </motion.div>
             </motion.div>
@@ -139,7 +123,7 @@ const Home = () => {
             >
                 <div className="space-y-8">
                     <h2 className="text-2xl md:text-3xl font-light text-indigo-200">
-                        Welcome to the club!
+                        Welcome to the network
                     </h2>
 
                     <div className="flex flex-col gap-4">
@@ -226,23 +210,11 @@ const Home = () => {
                 </div>
             </motion.div>
 
-            <SignupModal
-                isOpen={isSignupOpen}
-                onClose={() => setIsSignupOpen(false)}
-                onSignup={handleSignupSubmit}
-            />
-
             <VerificationModal
                 isOpen={isVerificationOpen}
                 onClose={() => setIsVerificationOpen(false)}
                 onVerify={handleVerificationComplete}
                 phoneNumber={userContext.phone}
-            />
-
-            <RoleSelectionModal
-                isOpen={isRoleOpen}
-                onClose={() => setIsRoleOpen(false)}
-                onRoleSelect={handleRoleSelect}
             />
         </div>
     );
