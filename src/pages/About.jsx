@@ -11,12 +11,14 @@ const faqs = [
     {
         question: "What exactly is this platform?",
         answer: "Think of us as a private country club for your career. We're a curated network for elite builders, operators, and leaders. We backchannel exclusive roles, curate high-signal events, and pay out residuals for brilliant introductions.",
-        keywords: ["platform", "what is", "about", "purpose", "exactly"]
+        keywords: ["platform", "what is", "about", "purpose", "exactly"],
+        link: ROUTES.EXPLORE
     },
     {
         question: "What kind of events are available?",
         answer: "A bit of everything for the ambitious. Technical deep-dives, founder mixers, community socials, and charity drives. Check the Events page to RSVP—and definitely jump into our Discord to see who else is going.",
-        keywords: ["events", "what events", "event types", "upcoming", "schedule", "discord"]
+        keywords: ["events", "what events", "event types", "upcoming", "schedule", "discord"],
+        link: ROUTES.EVENTS
     },
     {
         question: "How much is this going to cost me?",
@@ -31,18 +33,20 @@ const faqs = [
     {
         question: "Alright, how do I actually apply for a role?",
         answer: "Easy. Head over to the Jobs page. If you see a role with your name on it, hit 'Quick Apply' and drop your resume. If it's a mutual fit, we'll fast-track you directly to the decision-makers.",
-        keywords: ["apply", "job", "application", "resume", "how to", "process"]
+        keywords: ["apply", "job", "application", "resume", "how to", "process"],
+        link: ROUTES.JOBS
     },
     {
         question: "What's this about earning passive income?",
         answer: "That’s our Network Partner program. If you know high-performers looking to move, or hiring managers looking to build, suggest them via the Network page. If your intro leads to a placement or contract, we cut you a check. It pays to have friends.",
-        keywords: ["passive income", "earn", "money", "refer", "referral", "network", "commission", "friend"],
+        keywords: ["passive income", "earn", "money", "refer", "referrals", "network", "commission", "friend", "how much can i make from referrals"],
         link: ROUTES.NETWORK
     },
     {
         question: "I'm hiring right now. Can you help me find someone?",
         answer: "Absolutely. We pride ourselves on moving fast. We can sign a straightforward Consulting Services Agreement (CSA) today and start routing our all-star network to your open reqs immediately. Let's build your team.",
-        keywords: ["employer", "hiring", "company", "business", "partner", "csa", "help"]
+        keywords: ["employer", "hiring", "company", "business", "partner", "csa", "help"],
+        link: ROUTES.NETWORK
     },
     {
         question: "Tell me more about this Discord community.",
@@ -52,7 +56,7 @@ const faqs = [
     {
         question: "What if I just want to browse a normal website?",
         answer: "Fair enough! We know chatbots aren't for everyone. Our Explore page gives you the beautifully-designed highlight reel of what we do. But trust us, the good stuff happens on the inside.",
-        keywords: ["normal website", "normal site", "explore", "regular", "overview", "website instead", "useless", "terrible", "awful", "horrible", "worst", "bad bot", "hate this", "hate you", "you suck", "this sucks", "broken", "doesn't work", "doesn't understand", "stop", "give up", "forget it", "nevermind", "whatever", "stupid", "dumb", "not helpful", "unhelpful", "what do I do"],
+        keywords: ["normal website", "normal site", "explore", "regular", "overview", "website instead", "useless", "terrible", "awful", "horrible", "worst", "bad bot", "hate this", "hate you", "you suck", "this sucks", "broken", "doesn't work", "doesn't understand", "stop", "give up", "forget it", "nevermind", "whatever", "stupid", "dumb", "not helpful", "unhelpful", "what do I do", "show me a normal website instead"],
         link: ROUTES.EXPLORE
     },
     {
@@ -289,7 +293,8 @@ const SuggestedQuestion = ({ question, onClick }) => (
 
 // ─── Chatbot Interface ────────────────────────────────────────────────────────
 
-const ChatbotInterface = () => {
+const ChatbotInterface = ({ queryLogRef }) => {
+    const navigate = useNavigate();
     const [messages, setMessages] = useState([
         { isBot: true, text: "🤖 Hi! I can answer questions about our network, point you to some upcoming events you might like, and check if you're a perfect fit for any roles." }
     ]);
@@ -298,32 +303,12 @@ const ChatbotInterface = () => {
     const [messageCount, setMessageCount] = useState(0);
     const messagesEndRef = useRef(null);
     const consecutiveErrors = useRef(0);
-    const queryLogRef = useRef([]);
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, isTyping]);
 
-    useEffect(() => {
-        const sendLogs = () => {
-            if (queryLogRef.current.length > 0) {
-                // Use keepalive: true for reliable sending on unload
-                fetch(`${API_URL}/api/queries`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(queryLogRef.current),
-                    keepalive: true
-                }).catch(() => { });
-                queryLogRef.current = [];
-            }
-        };
 
-        window.addEventListener('beforeunload', sendLogs);
-        return () => {
-            window.removeEventListener('beforeunload', sendLogs);
-            sendLogs();
-        };
-    }, []);
 
     const findBestFaqMatch = (query) => {
         const lq = query.toLowerCase();
@@ -432,10 +417,14 @@ const ChatbotInterface = () => {
             if (consecutiveErrors.current >= 2) {
                 setMessages(prev => [...prev, {
                     isBot: true,
-                    text: "Okay, either my internet is being shit right now or I'm completely lost. We are a high-performance recruitment platform designed to connect top talent with leading companies. Check out the explore page to see everything we do.",
-                    link: ROUTES.EXPLORE
+                    text: "Okay, I'm completely lost. I'm going to send you over to our Explore page where things are a bit more reliable. Give me just a second...",
                 }]);
                 consecutiveErrors.current = 0;
+
+                // Route them to Explore after a brief reading delay
+                setTimeout(() => {
+                    navigate(ROUTES.EXPLORE);
+                }, 3000);
             } else {
                 setMessages(prev => [...prev, defaultMsgObj]);
             }
@@ -644,11 +633,37 @@ const QAItem = ({ question, answer }) => {
 
 const About = () => {
     const [activeTab, setActiveTab] = useState('chat');
+    const queryLogRef = useRef([]);
+
+    const sendLogs = () => {
+        if (queryLogRef.current.length > 0) {
+            fetch(`${API_URL}/api/queries`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(queryLogRef.current),
+                keepalive: true
+            }).catch(() => { });
+            queryLogRef.current = [];
+        }
+    };
 
     useEffect(() => {
+        window.addEventListener('beforeunload', sendLogs);
         const scrollY = window.scrollY;
         window.scrollTo(0, scrollY);
+
+        return () => {
+            window.removeEventListener('beforeunload', sendLogs);
+            sendLogs(); // Flush when navigating away from About
+        };
     }, []);
+
+    const handleTabSwitch = (tab) => {
+        if (tab === 'faq' && activeTab === 'chat') {
+            sendLogs();
+        }
+        setActiveTab(tab);
+    };
 
     return (
         <div className="w-full h-screen fixed inset-0 flex flex-col">
@@ -669,7 +684,7 @@ const About = () => {
                             transition={{ duration: 0.2 }}
                             className="h-full flex flex-col"
                         >
-                            <ChatbotInterface />
+                            <ChatbotInterface queryLogRef={queryLogRef} />
                         </motion.div>
                     ) : (
                         <motion.div
@@ -708,7 +723,7 @@ const About = () => {
             >
                 <div className="flex gap-2 bg-white/5 border border-white/10 rounded-xl p-1 max-w-md mx-auto backdrop-blur-md">
                     <button
-                        onClick={() => setActiveTab('chat')}
+                        onClick={() => handleTabSwitch('chat')}
                         className={`flex-1 py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 font-medium antialiased subpixel-antialiased transform-gpu ${activeTab === 'chat'
                             ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                             : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -719,7 +734,7 @@ const About = () => {
                         Chat
                     </button>
                     <button
-                        onClick={() => setActiveTab('faq')}
+                        onClick={() => handleTabSwitch('faq')}
                         className={`flex-1 py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 font-medium antialiased subpixel-antialiased transform-gpu ${activeTab === 'faq'
                             ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
                             : 'text-gray-400 hover:text-white hover:bg-white/5'
